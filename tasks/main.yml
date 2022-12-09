@@ -1,0 +1,26 @@
+---
+- block:
+    - name: Get vector distrib
+      ansible.builtin.get_url:
+        url: "{{ vector_installer_url }}"
+        dest: "./vector.deb"
+    - name: Install vector package
+      become: true
+      apt:
+        deb: "./vector.deb"
+
+    - name: Redefine vector config name
+      tags: vector_config
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/default/vector
+        regexp: "VECTOR_CONFIG="
+        line: VECTOR_CONFIG=/etc/vector/config.yaml
+    - name: Create vector config
+      tags: vector_config
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/vector/config.yaml
+        content: |
+          {{ vector_config | to_nice_yaml(indent=2) }}
+  notify: Start Vector service
