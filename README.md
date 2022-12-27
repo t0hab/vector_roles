@@ -1,38 +1,53 @@
-Vector role
-=========
+# Ansible-Vector role
 
-Install Vector
+Simple vector-server deploy and management role.
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+---
 
-Role Variables
---------------
+### Ansible
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+It was tested on the following versions:
 
-Dependencies
-------------
+* 2.12
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+### Operating systems
 
-Example Playbook
-----------------
+* Ubuntu 20.04
+* Centos 8
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## Role Variables
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+---
 
-License
--------
+You can specify config Vector
 
-BSD
+```yaml
+  vector_config:
+    sources:
+      our_log:
+        type: file
+        read_from: beginning
+        ignore_older_secs: 600
+        include:
+          - /var/log/**/*.log
+```
 
-Author Information
-------------------
+## Example Playbook
 
-Tokhir
+---
+
+Just include this role in your list. For example:
+
+```yaml
+  - host: all
+    roles:
+      - vector
+```
+
+## License
+
+---
+
+MIT
